@@ -1,7 +1,7 @@
-import { BooksPage } from "./pages/BooksPage";
+import { AppRoutes } from "./routes/AppRoutes";
 
 function App() {
-  return <BooksPage />;
+  return <AppRoutes />;
 }
 
 export default App;

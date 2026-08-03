@@ -3,6 +3,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { isAxiosError } from "axios";
 
 import { useAuth } from "../context/AuthContext";
+import { ErrorMessage } from "../components/layout/ErrorMessage";
+import { getApiErrorMessage } from "../utils/getApiErrorMessage";
 
 interface ApiErrorResponse {
   message?: string;
@@ -38,6 +40,13 @@ export function LoginPage() {
     } catch (requestError) {
       if (isAxiosError<ApiErrorResponse>(requestError)) {
         setError(
+    getApiErrorMessage(
+      error,
+      requestError.response?.data?.message ??
+            "Login failed. Please check your credentials.",
+    ),
+  );
+        setError(
           requestError.response?.data?.message ??
             "Login failed. Please check your credentials.",
         );
@@ -54,7 +63,7 @@ export function LoginPage() {
       <section className="auth-card">
         <h1>Login</h1>
 
-        {error && <p role="alert">{error}</p>}
+        {error && <ErrorMessage message={error}/>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-field">

@@ -3,6 +3,7 @@ import {
   type ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -49,10 +50,16 @@ export function CartProvider({ children }: CartProviderProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const resetCart = useCallback((): void => {
-    setCart(emptyCart);
+  const resetCart = useCallback(() => {
+    setCart({
+        items: [],
+        totalQuantity: 0,
+        totalPrice: 0,
+    });
+
     setError(null);
-  }, []);
+    }, []);
+
 
   const loadCart = useCallback(async (): Promise<void> => {
     if (!isAuthenticated) {
@@ -72,6 +79,14 @@ export function CartProvider({ children }: CartProviderProps) {
       setIsLoading(false);
     }
   }, [isAuthenticated, resetCart]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+        void loadCart();
+    } else {
+        resetCart();
+    }
+    }, [isAuthenticated, loadCart, resetCart]);
 
   const addItem = useCallback(
     async (bookId: number, quantity = 1): Promise<void> => {

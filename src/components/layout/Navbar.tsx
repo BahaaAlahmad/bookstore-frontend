@@ -1,12 +1,17 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
+
 import { useAuth } from "../../context/AuthContext";
+import { useCart } from "../../context/CartContext";
 
 export function Navbar() {
   const navigate = useNavigate();
+
   const { user, isAuthenticated, logout } = useAuth();
+  const { cart, resetCart } = useCart();
 
   function handleLogout(): void {
     logout();
+    resetCart();
     navigate("/login");
   }
 
@@ -21,7 +26,9 @@ export function Navbar() {
           <NavLink
             to="/books"
             className={({ isActive }) =>
-              isActive ? "navbar__link navbar__link--active" : "navbar__link"
+              isActive
+                ? "navbar__link navbar__link--active"
+                : "navbar__link"
             }
           >
             Books
@@ -38,6 +45,14 @@ export function Navbar() {
                 }
               >
                 Cart
+                {cart.totalQuantity > 0 && (
+                  <span
+                    className="navbar__cart-badge"
+                    aria-label={`${cart.totalQuantity} items in cart`}
+                  >
+                    {cart.totalQuantity}
+                  </span>
+                )}
               </NavLink>
 
               <NavLink

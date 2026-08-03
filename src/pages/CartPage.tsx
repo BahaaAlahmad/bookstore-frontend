@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-
+import { MainLayout } from "../components/layout/MainLayout";
 import { useCart } from "../context/CartContext";
+import { LoadingSpinner } from "../components/layout/LoadingSpinner";
+import { ErrorMessage } from "../components/layout/ErrorMessage";
 
 export function CartPage() {
   const {
     cart,
     isLoading,
     error,
-    loadCart,
     updateItem,
     removeItem,
     clearCart,
@@ -18,9 +19,6 @@ export function CartPage() {
   const [removingItemId, setRemovingItemId] = useState<number | null>(null);
   const [isClearing, setIsClearing] = useState(false);
 
-  useEffect(() => {
-    void loadCart();
-  }, [loadCart]);
 
   async function handleQuantityChange(
     cartItemId: number,
@@ -57,15 +55,15 @@ export function CartPage() {
   }
 
   if (isLoading) {
-    return (
-      <main className="page">
-        <p>Loading cart...</p>
-      </main>
-    );
-  }
+        return (
+            <MainLayout>
+                <LoadingSpinner message="Loading cart..." />
+            </MainLayout>
+        );
+    }
 
   return (
-    <main className="page">
+    <MainLayout>
       <div className="cart-page__header">
         <h1>Shopping Cart</h1>
 
@@ -80,7 +78,7 @@ export function CartPage() {
         )}
       </div>
 
-      {error && <p role="alert">{error}</p>}
+      {error && <ErrorMessage message={error}/>}
 
       {cart.items.length === 0 ? (
         <section>
@@ -153,6 +151,6 @@ export function CartPage() {
           </section>
         </>
       )}
-    </main>
+    </MainLayout>
   );
 }

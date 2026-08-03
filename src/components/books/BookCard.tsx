@@ -1,35 +1,39 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { useCart } from "../../context/CartContext";
-import { useAuth } from "../../context/AuthContext";
 import type { Book } from "../../models/book";
+import { useAuth } from "../../context/AuthContext";
+import { useCart } from "../../context/CartContext";
+import { useToast } from "../../context/ToastContext";
 
 interface BookCardProps {
   book: Book;
 }
 
 export function BookCard({ book }: BookCardProps) {
-  const { addItem } = useCart();
+  const navigate = useNavigate();
+
   const { isAuthenticated } = useAuth();
+  const { addItem } = useCart();
+  const { showToast } = useToast();
 
   const [isAdding, setIsAdding] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
 
   async function handleAddToCart(): Promise<void> {
     if (!isAuthenticated) {
-      setMessage("Please login to add books to your cart.");
+      showToast("Please login first.", "info");
+      navigate("/login");
       return;
     }
 
     try {
-      setMessage(null);
       setIsAdding(true);
 
       await addItem(book.id);
 
-      setMessage("Book added to cart.");
+      showToast(`${book.title} added to your cart.`, "success");
     } catch {
-      setMessage("Unable to add the book to the cart.");
+      showToast("Unable to add the book to the cart.", "error");
     } finally {
       setIsAdding(false);
     }
@@ -40,7 +44,7 @@ export function BookCard({ book }: BookCardProps) {
       {book.imageUrl ? (
         <img
           src={book.imageUrl}
-          alt={book.title}
+          alt={`Cover of ${book.title}`}
           className="book-card__image"
         />
       ) : (
@@ -75,12 +79,6 @@ export function BookCard({ book }: BookCardProps) {
         >
           {isAdding ? "Adding..." : "Add to cart"}
         </button>
-
-        {message && (
-          <p className="book-card__message">
-            {message}
-          </p>
-        )}
       </div>
     </article>
   );

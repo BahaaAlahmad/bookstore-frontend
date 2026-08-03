@@ -3,6 +3,8 @@ import { isAxiosError } from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
+import { ErrorMessage } from "../components/layout/ErrorMessage";
+import { getApiErrorMessage } from "../utils/getApiErrorMessage";
 
 interface ApiErrorResponse {
   message?: string;
@@ -62,6 +64,13 @@ export function RegisterPage() {
     } catch (requestError) {
       if (isAxiosError<ApiErrorResponse>(requestError)) {
         setError(
+    getApiErrorMessage(
+      error,
+      requestError.response?.data?.message ??
+            "Registration failed. Please check your details.",
+    ),
+  );
+        setError(
           requestError.response?.data?.message ??
             "Registration failed. Please check your details.",
         );
@@ -78,7 +87,7 @@ export function RegisterPage() {
       <section className="auth-card">
         <h1>Create account</h1>
 
-        {error && <p role="alert">{error}</p>}
+        {error && <ErrorMessage message={error}/>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-field">

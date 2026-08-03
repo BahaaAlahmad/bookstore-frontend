@@ -1,7 +1,11 @@
+import { MainLayout } from "../components/layout/MainLayout";
 import { useEffect, useState } from "react";
 import { getBooks } from "../api/bookApi";
 import { BookCard } from "../components/books/BookCard";
 import type { Book } from "../models/book";
+import { LoadingSpinner } from "../components/layout/LoadingSpinner";
+import { ErrorMessage } from "../components/layout/ErrorMessage";
+import { getApiErrorMessage } from "../utils/getApiErrorMessage";
 
 export function BooksPage() {
   const [books, setBooks] = useState<Book[]>([]);
@@ -14,7 +18,12 @@ export function BooksPage() {
         const result = await getBooks();
         setBooks(result);
       } catch {
-        setError("Unable to load books.");
+        setError(
+    getApiErrorMessage(
+      error,
+      "Unable to load books",
+    ),
+  );
       } finally {
         setIsLoading(false);
       }
@@ -24,15 +33,25 @@ export function BooksPage() {
   }, []);
 
   if (isLoading) {
-    return <p>Loading books...</p>;
+    return (
+      <MainLayout>
+        <LoadingSpinner message="Loading books..." />
+      </MainLayout>
+    );
   }
 
   if (error) {
-    return <p role="alert">{error}</p>;
+    return (
+        <MainLayout>
+            <ErrorMessage
+                message={error}
+            />
+        </MainLayout>
+    );
   }
 
   return (
-    <main>
+    <MainLayout>
       <h1>Online Bookstore</h1>
 
       {books.length === 0 ? (
@@ -44,6 +63,6 @@ export function BooksPage() {
           ))}
         </section>
       )}
-    </main>
+    </MainLayout>
   );
 }

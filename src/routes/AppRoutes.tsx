@@ -9,6 +9,10 @@ import { LoginPage } from "../pages/LoginPage";
 import { RegisterPage } from "../pages/RegisterPage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { CartPage } from "../pages/CartPage";
+import { CheckoutPage } from "../pages/CheckoutPage";
+import { OrdersPage } from "../pages/OrdersPage";
+import { OrderDetailsPage } from "../pages/OrderDetailsPage";
+import { NotFoundPage } from "../pages/NotFoundPage";
 
 export function AppRoutes() {
   return (
@@ -29,6 +33,33 @@ export function AppRoutes() {
           }
         />
 
+
+        <Route
+            path="/checkout"
+            element={
+                <ProtectedRoute>
+                    <CheckoutPage />
+                </ProtectedRoute>
+            }
+        />
+        <Route
+            path="/orders"
+            element={
+                <ProtectedRoute>
+                <OrdersPage />
+                </ProtectedRoute>
+            }
+        />
+
+        <Route
+            path="/orders/:orderId"
+            element={
+                <ProtectedRoute>
+                <OrderDetailsPage />
+                </ProtectedRoute>
+            }
+        />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );

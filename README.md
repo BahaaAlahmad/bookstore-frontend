@@ -1,75 +1,232 @@
-# React + TypeScript + Vite
+# 📚 Online Bookstore Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React frontend for the Online Bookstore coding kata.
 
-Currently, two official plugins are available:
+The application communicates with the Spring Boot REST API and allows users to browse books, manage their shopping cart, authenticate using JWT, and place orders.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+# Technologies
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19
+- TypeScript
+- Vite
+- React Router
+- Axios
+- Context API
+- Vitest
+- React Testing Library
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+# Features
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Authentication
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- User registration
+- User login
+- JWT authentication
+- Protected routes
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Books
 
-```
+- Display all available books
+- View book information
+- Add books to the shopping cart
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Shopping Cart
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- View cart contents
+- Update quantities
+- Remove items
+- Clear cart
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Checkout
+
+- View order summary
+- Complete checkout
+
+## Orders
+
+- View order history
+- View order details
+
+## UI
+
+- Responsive navigation
+- Loading spinner
+- Error handling
+- Toast notifications
+- Custom 404 page
+
+---
+
+# Project Structure
 
 ```
+src
+│
+├── api
+│   ├── axiosClient.ts
+│   ├── bookApi.ts
+│   ├── cartApi.ts
+│   └── orderApi.ts
+│
+├── components
+│   ├── books
+│   └── layout
+│
+├── context
+│   ├── AuthContext.tsx
+│   ├── CartContext.tsx
+│   └── ToastContext.tsx
+│
+├── models
+│
+├── pages
+│
+├── routes
+│
+├── test
+│
+├── utils
+│
+├── App.tsx
+└── main.tsx
+```
+
+---
+
+# Prerequisites
+
+Before running the application, install:
+
+- Node.js 20 or later
+- npm
+
+Verify the installation:
+
+```bash
+node -v
+npm -v
+```
+
+---
+
+# Installation
+
+Clone the repository and navigate to the frontend project.
+
+```bash
+cd bookstore-frontend
+```
+
+Install the dependencies.
+
+```bash
+npm install
+```
+
+---
+
+
+# Running the Application
+
+Start the development server.
+
+```bash
+npm run dev
+```
+
+The application will be available at:
+
+```
+http://localhost:5173
+```
+
+---
+
+# Backend Requirements
+
+The Spring Boot backend must be running before starting the frontend.
+
+Default backend URL:
+
+```
+http://localhost:8080
+```
+
+The frontend communicates with the backend through:
+
+```
+http://localhost:8080/api
+```
+
+---
+
+# Authentication
+
+The application uses JWT authentication.
+
+After a successful login:
+
+- The JWT access token is stored in Local Storage.
+- Every API request automatically includes the Authorization header.
+- Protected pages require authentication.
+- Invalid or expired tokens automatically redirect the user to the login page.
+
+---
+
+# Testing
+
+Frontend tests are written using:
+
+- Vitest
+- React Testing Library
+
+Run all tests:
+
+```bash
+npm run test:run
+```
+
+---
+
+# Error Handling
+
+The frontend includes:
+
+- Axios request interceptors
+- Axios response interceptors
+- Global error handling
+- Loading indicators
+- User-friendly error messages
+- Toast notifications
+
+---
+
+# Architecture
+
+The application follows a feature-based structure.
+
+```
+Pages
+        │
+        ▼
+Components
+        │
+        ▼
+Context API
+        │
+        ▼
+Axios API Layer
+        │
+        ▼
+Spring Boot REST API
+```
+
+---
+
+# Author
+
+Bahaa Ahmad
